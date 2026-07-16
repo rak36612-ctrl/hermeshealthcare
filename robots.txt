@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: /sitemap.xml
+
+# Hermes Health Care — Multi Speciality Clinic, Ullal, Bengaluru
+# Allow all search engine crawlers full access
