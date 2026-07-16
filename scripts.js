@@ -7,16 +7,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // 0. Entry Preloader Hide Logic
     const preloader = document.getElementById('entry-preloader');
     if (preloader) {
-        const backupTimeout = setTimeout(() => {
-            preloader.classList.add('fade-out');
-        }, 3000);
-
-        window.addEventListener('load', () => {
-            clearTimeout(backupTimeout);
-            setTimeout(() => {
+        const isFirstLoad = !sessionStorage.getItem('hermes_visited');
+        if (isFirstLoad) {
+            sessionStorage.setItem('hermes_visited', 'true');
+            const backupTimeout = setTimeout(() => {
                 preloader.classList.add('fade-out');
-            }, 1800);
-        });
+            }, 3000);
+
+            window.addEventListener('load', () => {
+                clearTimeout(backupTimeout);
+                setTimeout(() => {
+                    preloader.classList.add('fade-out');
+                }, 1800);
+            });
+        } else {
+            // Already visited in this session, hide instantly
+            preloader.style.display = 'none';
+        }
     }
 
     // 1. Mobile Menu Toggle
@@ -182,4 +189,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize carousel layout
     setTimeout(updateCarousel, 200);
+
+    // 5. Generalized click navigation for all service cards in the grid
+    const serviceCards = document.querySelectorAll('.services-grid .service-card');
+    serviceCards.forEach(card => {
+        card.style.cursor = 'pointer';
+
+        const navigateToPage = () => {
+            const anchor = card.querySelector('a');
+            if (anchor) {
+                const url = anchor.getAttribute('href');
+                if (url) {
+                    window.location.href = url;
+                }
+            }
+        };
+
+        card.addEventListener('click', (event) => {
+            const isClickableChild = event.target.closest('a, button');
+            if (!isClickableChild) {
+                navigateToPage();
+            }
+        });
+
+        card.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                navigateToPage();
+            }
+        });
+    });
+});
+
+// 6. FAQ Accordion Toggle
+document.addEventListener('DOMContentLoaded', () => {
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        if (question) {
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                // Close all other items
+                faqItems.forEach(other => other.classList.remove('active'));
+                // Toggle the clicked item
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        }
+    });
 });
