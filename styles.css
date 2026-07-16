@@ -1885,7 +1885,7 @@ a {
 
 /* SEO Rich Content Section */
 .seo-content-section {
-    padding: var(--section-padding);
+    padding: 80px 24px;
     background: var(--color-bg-white);
 }
 
@@ -2257,6 +2257,10 @@ a {
    SEO Sections — Responsive (Mobile ≤768px)
    ========================================================================== */
 @media (max-width: 768px) {
+    .seo-content-section {
+        padding: 40px 16px;
+    }
+
     .seo-content-block h2 {
         font-size: 1.45rem;
     }
